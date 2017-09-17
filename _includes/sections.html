@@ -1,0 +1,12 @@
+{% if post %}
+    {% for cat in post.category %}
+    {% if cat != "" %}
+    <a href="{{ site.baseurl }}{{ url }}#{{cat}}-cat" title="category: {{cat}}" target="_blank" class="category" style="background-image: url('/images/icons/{{cat}}.svg')">{{ cat }}</a>
+    {% endif %}
+    {% endfor %}
+    {% for tag in post.tags %}
+    {% if tag != "" %}
+    <a href="{{ site.baseurl }}{{ url }}#{{tag}}-tag" title="tag: {{tag}}" target="_blank" class="tag">{{ tag }}</a>
+    {% endif %}
+    {% endfor %}
+{% endif %}
