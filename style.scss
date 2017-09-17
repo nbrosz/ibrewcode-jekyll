@@ -268,6 +268,10 @@ nav {
   .read-more {
     text-transform: uppercase;
     font-size: 15px;
+    background-color: #DBAE5B;
+    padding: 10px;
+    border-radius: 5px;
+    color: black;
   }
 
   .tag, .category {
@@ -282,7 +286,6 @@ nav {
     font-size: 10pt;
     text-decoration: none;
     font-family: sans-serif;
-    transition: box-shadow .125s;
   }
 
   .tag {
@@ -292,8 +295,12 @@ nav {
   .category {
     background-color: #96F481;
   }
-  
-  .tag:hover, .category:hover {
+
+  .hover {
+    transition: box-shadow .125s;
+  }
+
+  .hover:hover  {
     box-shadow:inset 0 0 0 2px black;
     transition: box-shadow .0625s;
   }
