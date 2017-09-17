@@ -273,37 +273,41 @@ nav {
     border-radius: 5px;
     color: black;
   }
+}
 
-  .tag, .category {
-    color: black;
-    margin: 0 0 0 0;
-    background-repeat: no-repeat;
-    background-size: auto 50%;
-    background-position: 8px center;
-    background-image: url("/images/icons/tag.svg");
-    border-radius: 15px;
-    padding: 5px 10px 5px 25px;
-    font-size: 10pt;
-    text-decoration: none;
-    font-family: sans-serif;
-  }
+.tag, .category {
+  color: black;
+  margin: 0 0 0 0;
+  background-repeat: no-repeat;
+  background-size: auto 50%;
+  background-position: 8px center;
+  background-image: url("/images/icons/tag.svg");
+  border-radius: 15px;
+  padding: 5px 10px 5px 25px;
+  font-size: 10pt;
+  text-decoration: none;
+  font-family: sans-serif;
+}
 
-  .tag {
-    background-color: #81d4f4;
-  }
+.tag:hover, .category:hover {
+  color: black;
+}
 
-  .category {
-    background-color: #96F481;
-  }
+.tag {
+  background-color: #81d4f4;
+}
 
-  .hover {
-    transition: box-shadow .125s;
-  }
+.category {
+  background-color: #96F481;
+}
 
-  .hover:hover  {
-    box-shadow:inset 0 0 0 2px black;
-    transition: box-shadow .0625s;
-  }
+.hover {
+  transition: box-shadow .125s;
+}
+
+.hover:hover  {
+  box-shadow:inset 0 0 0 2px black;
+  transition: box-shadow .0625s;
 }
 
 .wrapper-footer {
