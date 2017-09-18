@@ -306,6 +306,14 @@ nav {
   background-color: #96F481;
 }
 
+.tag.disabled, .category.disabled {
+  background-color: #aaa;
+}
+
+.tag.disabled.hover:hover, .category.disabled.hover:hover {
+  box-shadow: none;
+}
+
 .hover {
   transition: box-shadow .125s;
 }
