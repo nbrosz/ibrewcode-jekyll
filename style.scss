@@ -279,15 +279,19 @@ nav {
   color: black;
   margin: 5px 0 0 0;
   display: inline-block;
-  background-repeat: no-repeat;
-  background-size: auto 50%;
-  background-position: 8px center;
-  background-image: url("/images/icons/tag.svg");
   border-radius: 15px;
-  padding: 5px 10px 5px 25px;
+  padding: 5px 10px;
   font-size: 10pt;
   text-decoration: none;
+  text-align: center;
   font-family: sans-serif;
+}
+
+.tag img, .category img {
+  width: auto;
+  height: 14pt;
+  margin-right: 5px;
+  vertical-align: middle;
 }
 
 .tag:hover, .category:hover {
