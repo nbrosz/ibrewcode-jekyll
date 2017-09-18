@@ -1,7 +1,7 @@
 ---
 ---
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
 	<channel>
 		<title>{{ site.name | xml_escape }} - gamedev</title>
 		<description>Posts categorized as 'gamedev'</description>
@@ -12,8 +12,9 @@
 				<title>{{ post.title | xml_escape }}</title>
 				{% if post.excerpt %}
 					<description>{{ post.excerpt | xml_escape }}</description>
+					<content:encoded><![CDATA[{{ post.content | xml_escape }}]]></content:encoded>
 				{% else %}
-					<description>{{ post.content | xml_escape }}</description>
+					<content:encoded><![CDATA[{{ post.content | xml_escape }}]]></content:encoded>
 				{% endif %}
 				<pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
 				<link>{{ site.url }}{{ post.url }}</link>
