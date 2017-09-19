@@ -1,7 +1,7 @@
 ---
 layout: post
 title: You're up and running!
-categories: [testing, gamedev, jekyll]
+categories: [testing, gamedev, mobiledev]
 tags: [testing, jekyll]
 ---
 
