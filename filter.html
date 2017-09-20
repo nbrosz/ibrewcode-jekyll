@@ -4,6 +4,7 @@ layout: default
 
 {% assign posts = site.posts %}
 {% assign postStyle = "display: none;" %}
+{% assign localAnchor = true %}
 {% include posts.html %}
 
 <script>
@@ -28,7 +29,16 @@ layout: default
                 var tagElem = tagElems[j];
                 sectionList.push(tagElem);
                 if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
-                    var tagPosts = tagTable[tagElem.classList[2]] = (tagTable[tagElem.classList[2]] || []);
+                    var tagClass = tagElem.classList[2];
+                    // wrap in a function to circumvent hoisting
+                    var generateClickFunction = function(tagParam) {
+                        return function() {
+                            //window.scrollTo(0, 0);
+                            filterBy([tagParam], null);
+                        };
+                    };
+                    tagElem.onclick = generateClickFunction(tagClass);
+                    var tagPosts = tagTable[tagClass] = (tagTable[tagClass] || []);
                     tagPosts.push({post: post, elem: tagElem});
                 }
             }
@@ -37,12 +47,20 @@ layout: default
                 var catElem = catElems[j];
                 sectionList.push(catElem);
                 if (catElem && catElem.classList && catElem.classList.length >= 3) {
-                    var catPosts = catTable[catElem.classList[2]] = (catTable[catElem.classList[2]] || []);
+                    var catClass = catElem.classList[2];
+                    // wrap in a function to circumvent hoisting
+                    var generateClickFunction = function(catParam) {
+                        return function() {
+                            //window.scrollTo(0, 0);
+                            filterBy(null, [catParam]);
+                        };
+                    };
+                    catElem.onclick = generateClickFunction(catClass);
+                    var catPosts = catTable[catClass] = (catTable[catClass] || []);
                     catPosts.push({post: post, elem: catElem});
                 }
             }
         }
-        console.log(JSON.stringify(tagTable) + ", " + JSON.stringify(catTable));
     }
 
     function hideAllPosts() {
