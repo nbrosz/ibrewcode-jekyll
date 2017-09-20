@@ -1,0 +1,19 @@
+<div class="posts">
+    {% for post in posts %}
+      <article class="post" {% if postStyle %}style="{{postStyle}}"{% endif %}>
+        <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+        <div class="date">
+            Written on {{ post.date | date: "%B %e, %Y" }}
+        </div>
+        {% assign categories = post.categories %}
+        {% assign tags = post.tags %}
+        {% include sections.html %}
+        <hr />
+        <div class="entry">
+          {{ post.excerpt }}
+        </div>
+  
+        <a href="{{ site.baseurl }}{{ post.url }}" class="read-more hover">Read More</a>
+      </article>
+    {% endfor %}
+  </div>
