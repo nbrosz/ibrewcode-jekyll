@@ -88,12 +88,14 @@ The following part removes dulpicated tags and invalid tags like blank tag.
                     };
                 };
                 tagElem.onclick = generateClickFunction(tagClass);
+                // var tagPosts = tagTable[tagClass] = (tagTable[tagClass] || []);
+                // tagPosts.push({elem: tagElem});
             }
         }
         var catElems = sections.getElementsByClassName("category");
         for(var j = 0; j < catElems.length; j++) {
             var catElem = catElems[j];
-            // sectionList.push(catElem);
+            //sectionList.push(catElem);
             if (catElem && catElem.classList && catElem.classList.length >= 3) {
                 var catClass = catElem.classList[2];
                 // wrap in a function to circumvent hoisting
@@ -104,6 +106,8 @@ The following part removes dulpicated tags and invalid tags like blank tag.
                     };
                 };
                 catElem.onclick = generateClickFunction(catClass);
+                // var catPosts = catTable[catClass] = (catTable[catClass] || []);
+                // catPosts.push({elem: catElem});
             }
         }
     }
@@ -168,8 +172,10 @@ The following part removes dulpicated tags and invalid tags like blank tag.
                 var tagData = tagTable[tags[i]];
                 if (tagData) {
                     for(var j = 0; j < tagData.length; j++) {
-                        tagData[j].post.style.display = "initial";
-                        tagData[j].elem.classList.remove("disabled");
+                        var data = tagData[j];
+                        data.elem.classList.remove("disabled");
+                        if (data.post)
+                            data.post.style.display = "initial";
                     }
                 }
             }
@@ -179,8 +185,10 @@ The following part removes dulpicated tags and invalid tags like blank tag.
                 var catData = catTable[categories[i]];
                 if (catData) {
                     for(var j = 0; j < catData.length; j++) {
-                        catData[j].post.style.display = "initial";
-                        catData[j].elem.classList.remove("disabled");
+                        var data = catData[j];
+                        data.elem.classList.remove("disabled");
+                        if (data.post)
+                            data.post.style.display = "initial";
                     }
                 }
             }
