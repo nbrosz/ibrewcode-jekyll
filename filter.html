@@ -2,13 +2,63 @@
 layout: default
 ---
 
+{% comment %}
+=======================
+The following part extracts all the tags from your posts and sort tags, so that you do not need to manually collect your tags to a place.
+=======================
+{% endcomment %}
+{% assign rawtags = "" %}
+{% assign rawcats = "" %}
+{% for post in site.posts %}
+	{% assign ttags = post.tags | join:'|' | append:'|' %}
+    {% assign rawtags = rawtags | append:ttags %}
+    {% assign tcats = post.categories | join:'|' | append:'|' %}
+	{% assign rawcats = rawcats | append:tcats %}
+{% endfor %}
+{% assign rawtags = rawtags | split:'|' | sort %}
+{% assign rawcats = rawcats | split:'|' | sort %}
+
+{% comment %}
+=======================
+The following part removes dulpicated tags and invalid tags like blank tag.
+=======================
+{% endcomment %}
+{% assign tags = "" %}
+{% for tag in rawtags %}
+	{% if tag != "" %}
+		{% if tags == "" %}
+			{% assign tags = tag | split:'|' %}
+		{% endif %}
+		{% unless tags contains tag %}
+			{% assign tags = tags | join:'|' | append:'|' | append:tag | split:'|' %}
+		{% endunless %}
+	{% endif %}
+{% endfor %}
+
+{% assign categories = "" %}
+{% for cat in rawcats %}
+	{% if cat != "" %}
+		{% if categories == "" %}
+			{% assign cat = cat | split:'|' %}
+		{% endif %}
+		{% unless categories contains cat %}
+			{% assign categories = categories | join:'|' | append:'|' | append:cat | split:'|' %}
+		{% endunless %}
+	{% endif %}
+{% endfor %}
+
+<div id="sections">
+{% assign localAnchor = true %}
+{% include sections.html %}
+</div>
+
 {% assign posts = site.posts %}
 {% assign postStyle = "display: none;" %}
-{% assign localAnchor = true %}
 {% include posts.html %}
 
 <script>
     window.onload = function() {
+        parseSections();
         parsePosts();
         var sectionRegexp = /#tag-(\S+)|#cat-(\S+)/;
         var match = sectionRegexp.exec(window.location.hash);
@@ -20,6 +70,45 @@ layout: default
     };
 
     var tagTable = {}, catTable = {}, postList = [], sectionList = [];
+
+    // parse tags/categories for full sections list at top of page
+    function parseSections() {
+        var sections = document.getElementById("sections");
+        var tagElems = sections.getElementsByClassName("tag");
+        for(var j = 0; j < tagElems.length; j++) {
+            var tagElem = tagElems[j];
+            // sectionList.push(tagElem);
+            if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
+                var tagClass = tagElem.classList[2];
+                // wrap in a function to circumvent hoisting
+                var generateClickFunction = function(tagParam) {
+                    return function() {
+                        //window.scrollTo(0, 0);
+                        filterBy([tagParam], null);
+                    };
+                };
+                tagElem.onclick = generateClickFunction(tagClass);
+            }
+        }
+        var catElems = sections.getElementsByClassName("category");
+        for(var j = 0; j < catElems.length; j++) {
+            var catElem = catElems[j];
+            // sectionList.push(catElem);
+            if (catElem && catElem.classList && catElem.classList.length >= 3) {
+                var catClass = catElem.classList[2];
+                // wrap in a function to circumvent hoisting
+                var generateClickFunction = function(catParam) {
+                    return function() {
+                        //window.scrollTo(0, 0);
+                        filterBy(null, [catParam]);
+                    };
+                };
+                catElem.onclick = generateClickFunction(catClass);
+            }
+        }
+    }
+
+    // parse posts and their sections
     function parsePosts() {
         postList = document.getElementsByClassName("post");
         for(var i = 0; i < postList.length; i++) {
