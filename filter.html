@@ -1,0 +1,82 @@
+---
+layout: default
+---
+
+{% assign posts = site.posts %}
+{% assign postStyle = "display: none;" %}
+{% include posts.html %}
+
+<script>
+    window.onload = function() {
+        parsePosts();
+        var sectionRegexp = /#tag-(\S+)|#cat-(\S+)/;
+        var match = sectionRegexp.exec(window.location.hash);
+        if (match) {
+            var tag = match[1];
+            var cat = match[2];
+            filterBy([tag], [cat]);
+        }
+    };
+
+    var tagTable = {}, catTable = {}, postList = [], sectionList = [];
+    function parsePosts() {
+        postList = document.getElementsByClassName("post");
+        for(var i = 0; i < postList.length; i++) {
+            var post = postList[i];
+            var tagElems = post.getElementsByClassName("tag");
+            for(var j = 0; j < tagElems.length; j++) {
+                var tagElem = tagElems[j];
+                sectionList.push(tagElem);
+                if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
+                    var tagPosts = tagTable[tagElem.classList[2]] = (tagTable[tagElem.classList[2]] || []);
+                    tagPosts.push({post: post, elem: tagElem});
+                }
+            }
+            var catElems = post.getElementsByClassName("category");
+            for(var j = 0; j < catElems.length; j++) {
+                var catElem = catElems[j];
+                sectionList.push(catElem);
+                if (catElem && catElem.classList && catElem.classList.length >= 3) {
+                    var catPosts = catTable[catElem.classList[2]] = (catTable[catElem.classList[2]] || []);
+                    catPosts.push({post: post, elem: catElem});
+                }
+            }
+        }
+        console.log(JSON.stringify(tagTable) + ", " + JSON.stringify(catTable));
+    }
+
+    function hideAllPosts() {
+        for (var i = 0; i < postList.length; i++) {
+            postList[i].style.display = "none";
+        }
+        for (var i = 0; i < sectionList.length; i++) {
+            sectionList[i].classList.add("disabled");
+        }
+    }
+
+    function filterBy(tags, categories) {
+        hideAllPosts();
+        if (tags && tagTable) {
+            for ( var i = 0 ; i < tags.length; i++) {
+                var tagData = tagTable[tags[i]];
+                if (tagData) {
+                    for(var j = 0; j < tagData.length; j++) {
+                        tagData[j].post.style.display = "initial";
+                        tagData[j].elem.classList.remove("disabled");
+                    }
+                }
+            }
+        }
+        if (categories && catTable) {
+            for ( var i = 0 ; i < categories.length; i++) {
+                var catData = catTable[categories[i]];
+                if (catData) {
+                    for(var j = 0; j < catData.length; j++) {
+                        catData[j].post.style.display = "initial";
+                        catData[j].elem.classList.remove("disabled");
+                    }
+                }
+            }
+        }
+    }
+</script>

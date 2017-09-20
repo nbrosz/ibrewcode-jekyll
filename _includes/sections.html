@@ -1,10 +1,10 @@
 {% for cat in categories %}
 {% if cat != "" %}
-<a href="{{ site.baseurl }}{{ url }}#{{cat}}-cat" title="category: {{cat}}" class="category hover"><img src="{{ site.baseurl }}/images/icons/{{cat | slugify}}.svg" />{{ cat | slugify }}</a>
+<a href="{{ site.baseurl }}/filter#cat-{{cat | slugify}}" title="category: {{cat}}" class="category hover {{cat}}"><img src="{{ site.baseurl }}/images/icons/{{cat | slugify}}.svg" />{{ cat | slugify }}</a>
 {% endif %}
 {% endfor %}
 {% for tag in tags %}
 {% if tag != "" %}
-<a href="#{{ tag | slugify }}" title="tag: {{tag}}" class="tag hover"><img src="{{ site.baseurl }}/images/icons/tag.svg" />{{ tag | slugify }}</a>
+<a href="{{ site.baseurl }}/filter#tag-{{tag | slugify}}" title="tag: {{tag}}" class="tag hover {{tag}}"><img src="{{ site.baseurl }}/images/icons/tag.svg" />{{ tag | slugify }}</a>
 {% endif %}
 {% endfor %}
