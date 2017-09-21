@@ -1,8 +1,8 @@
 ---
 layout: post
 title: More Testing
-categories: [testing, gamedev, jekyll, random]
-tags: [testing, jekyll, random, ipsum]
+categories: [Testing, Game Dev, Jekyll, Random]
+tags: [Testing, Jekyll, Random, Ipsum]
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in nisi lectus. Sed sodales, urna ut euismod varius, nunc turpis consequat sapien, quis tristique lacus ex sed tortor. Pellentesque sapien nulla, maximus pellentesque nulla id, tincidunt gravida leo. Maecenas iaculis pellentesque est, a dignissim elit commodo eget. Nam non efficitur purus. Suspendisse potenti. Nam euismod fringilla diam id convallis.
