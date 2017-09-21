@@ -20,7 +20,7 @@ The following part extracts all the tags from your posts and sort tags, so that 
 
 {% comment %}
 =======================
-The following part removes dulpicated tags and invalid tags like blank tag.
+The following part removes duplicated tags and invalid tags like blank tag.
 =======================
 {% endcomment %}
 {% assign tags = "" %}
@@ -78,8 +78,8 @@ The following part removes dulpicated tags and invalid tags like blank tag.
         for(var j = 0; j < tagElems.length; j++) {
             var tagElem = tagElems[j];
             taxonomyList.push(tagElem);
-            if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
-                var tagClass = tagElem.classList[2];
+            if (tagElem) {
+                var tagClass = tagElem.getAttribute("data-slug");
                 // wrap in a function to circumvent hoisting
                 var generateClickFunction = function(tagParam) {
                     return function() {
@@ -96,8 +96,8 @@ The following part removes dulpicated tags and invalid tags like blank tag.
         for(var j = 0; j < catElems.length; j++) {
             var catElem = catElems[j];
             taxonomyList.push(catElem);
-            if (catElem && catElem.classList && catElem.classList.length >= 3) {
-                var catClass = catElem.classList[2];
+            if (catElem) {
+                var catClass = catElem.getAttribute("data-slug");
                 // wrap in a function to circumvent hoisting
                 var generateClickFunction = function(catParam) {
                     return function() {
