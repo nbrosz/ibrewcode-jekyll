@@ -47,9 +47,9 @@ The following part removes dulpicated tags and invalid tags like blank tag.
 	{% endif %}
 {% endfor %}
 
-<div id="sections">
+<div id="taxonomies">
 {% assign localAnchor = true %}
-{% include sections.html %}
+{% include taxonomies.html %}
 </div>
 
 {% assign posts = site.posts %}
@@ -58,33 +58,33 @@ The following part removes dulpicated tags and invalid tags like blank tag.
 
 <script>
     window.onload = function() {
-        parseSections();
+        parseTaxonomies();
         parsePosts();
-        var sectionRegexp = /#tag-(\S+)|#cat-(\S+)/;
-        var match = sectionRegexp.exec(window.location.hash);
+        var taxonomyRegexp = /#tag-(\S+)|#cat-(\S+)/;
+        var match = taxonomyRegexp.exec(window.location.hash);
         if (match) {
             var tag = match[1];
             var cat = match[2];
-            toggleSection(tag, cat);
+            toggleTaxonomy(tag, cat);
         }
     };
 
-    var tagTable = {}, catTable = {}, postList = [], sectionList = [], visibleTags = [], visibleCats = [];
+    var tagTable = {}, catTable = {}, postList = [], taxonomyList = [], visibleTags = [], visibleCats = [];
 
-    // parse tags/categories for full sections list at top of page
-    function parseSections() {
-        var sections = document.getElementById("sections");
-        var tagElems = sections.getElementsByClassName("tag");
+    // parse tags/categories for full taxonomies list at top of page
+    function parseTaxonomies() {
+        var taxonomies = document.getElementById("taxonomies");
+        var tagElems = taxonomies.getElementsByClassName("tag");
         for(var j = 0; j < tagElems.length; j++) {
             var tagElem = tagElems[j];
-            sectionList.push(tagElem);
+            taxonomyList.push(tagElem);
             if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
                 var tagClass = tagElem.classList[2];
                 // wrap in a function to circumvent hoisting
                 var generateClickFunction = function(tagParam) {
                     return function() {
                         //window.scrollTo(0, 0);
-                        toggleSection(tagParam, null);
+                        toggleTaxonomy(tagParam, null);
                     };
                 };
                 tagElem.onclick = generateClickFunction(tagClass);
@@ -92,17 +92,17 @@ The following part removes dulpicated tags and invalid tags like blank tag.
                 tagPosts.push({elem: tagElem});
             }
         }
-        var catElems = sections.getElementsByClassName("category");
+        var catElems = taxonomies.getElementsByClassName("category");
         for(var j = 0; j < catElems.length; j++) {
             var catElem = catElems[j];
-            sectionList.push(catElem);
+            taxonomyList.push(catElem);
             if (catElem && catElem.classList && catElem.classList.length >= 3) {
                 var catClass = catElem.classList[2];
                 // wrap in a function to circumvent hoisting
                 var generateClickFunction = function(catParam) {
                     return function() {
                         //window.scrollTo(0, 0);
-                        toggleSection(null, catParam);
+                        toggleTaxonomy(null, catParam);
                     };
                 };
                 catElem.onclick = generateClickFunction(catClass);
@@ -112,7 +112,7 @@ The following part removes dulpicated tags and invalid tags like blank tag.
         }
     }
 
-    // parse posts and their sections
+    // parse posts and their taxonomies
     function parsePosts() {
         postList = document.getElementsByClassName("post");
         for(var i = 0; i < postList.length; i++) {
@@ -120,14 +120,14 @@ The following part removes dulpicated tags and invalid tags like blank tag.
             var tagElems = post.getElementsByClassName("tag");
             for(var j = 0; j < tagElems.length; j++) {
                 var tagElem = tagElems[j];
-                sectionList.push(tagElem);
+                taxonomyList.push(tagElem);
                 if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
                     var tagClass = tagElem.classList[2];
                     // wrap in a function to circumvent hoisting
                     var generateClickFunction = function(tagParam) {
                         return function() {
                             //window.scrollTo(0, 0);
-                            toggleSection(tagParam, null);
+                            toggleTaxonomy(tagParam, null);
                         };
                     };
                     tagElem.onclick = generateClickFunction(tagClass);
@@ -138,14 +138,14 @@ The following part removes dulpicated tags and invalid tags like blank tag.
             var catElems = post.getElementsByClassName("category");
             for(var j = 0; j < catElems.length; j++) {
                 var catElem = catElems[j];
-                sectionList.push(catElem);
+                taxonomyList.push(catElem);
                 if (catElem && catElem.classList && catElem.classList.length >= 3) {
                     var catClass = catElem.classList[2];
                     // wrap in a function to circumvent hoisting
                     var generateClickFunction = function(catParam) {
                         return function() {
                             //window.scrollTo(0, 0);
-                            toggleSection(null, catParam);
+                            toggleTaxonomy(null, catParam);
                         };
                     };
                     catElem.onclick = generateClickFunction(catClass);
@@ -162,12 +162,12 @@ The following part removes dulpicated tags and invalid tags like blank tag.
             postList[i].classList.remove("visible");
             postList[i].removeAttribute("style"); // remove any initial styling
         }
-        for (var i = 0; i < sectionList.length; i++) {
-            sectionList[i].classList.add("disabled");
+        for (var i = 0; i < taxonomyList.length; i++) {
+            taxonomyList[i].classList.add("disabled");
         }
     }
 
-    function toggleSection(tag, category) {
+    function toggleTaxonomy(tag, category) {
         if (tag) {
             var tagIndex = visibleTags.indexOf(tag);
             if (tagIndex == -1)
