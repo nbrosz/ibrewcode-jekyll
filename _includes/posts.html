@@ -3,7 +3,7 @@
       <article class="post" {% if postStyle %}style="{{postStyle}}"{% endif %}>
         <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
         <div class="date">
-            Written on {{ post.date | date: "%B %e, %Y" }}
+          Written on {% if post.modified_date %}<span class="strike">{% endif %}{{ post.date | date: "%B %e, %Y" }}{%if post.modified_date %}</span> {{ post.modified_date | date: "%B %e, %Y" }}{% endif %}
         </div>
         {% assign categories = post.categories %}
         {% assign tags = post.tags %}
