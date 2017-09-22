@@ -57,7 +57,7 @@ The following part removes duplicated tags and invalid tags like blank tag.
 {% include posts.html %}
 
 <script>
-    window.onload = function () {
+    window.addEventListener('load', function (){
         var taxonomies = document.getElementById("taxonomies");
 
         parseTaxonomies(taxonomies);
@@ -79,7 +79,7 @@ The following part removes duplicated tags and invalid tags like blank tag.
 
         //if (searchTerm)
             //performSearch(searchTerm);
-    };
+    });
 
     var tagTable = {}, catTable = {}, postList = [], taxonomyList = [], visibleTags = [], visibleCats = [];
 
