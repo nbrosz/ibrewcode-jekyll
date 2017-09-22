@@ -57,57 +57,67 @@ The following part removes duplicated tags and invalid tags like blank tag.
 {% include posts.html %}
 
 <script>
-    window.onload = function() {
-        parseTaxonomies();
+    window.onload = function () {
+        var taxonomies = document.getElementById("taxonomies");
+
+        parseTaxonomies(taxonomies);
         parsePosts();
-        var taxonomyRegexp = /#tag-(\S+)|#cat-(\S+)/;
-        var match = taxonomyRegexp.exec(window.location.hash);
-        if (match) {
-            var tag = match[1];
-            var cat = match[2];
-            toggleTaxonomy(tag, cat);
+        var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
+
+        var searchTerm = null;
+        var match;
+        while (match = taxonomyRegexp.exec(window.location.hash)) {
+            if (match[1] == "tag")
+                toggleTaxonomy(match[2], null);
+            else if (match[1] == "cat")
+                toggleTaxonomy(null, match[2]);
+            else if (match[1] == "search" && !searchTerm)
+                searchTerm = match[2];
         }
+
+        performFilter(visibleTags, visibleCats, searchTerm);
+
+        //if (searchTerm)
+            //performSearch(searchTerm);
     };
 
     var tagTable = {}, catTable = {}, postList = [], taxonomyList = [], visibleTags = [], visibleCats = [];
 
     // parse tags/categories for full taxonomies list at top of page
-    function parseTaxonomies() {
-        var taxonomies = document.getElementById("taxonomies");
-        var tagElems = taxonomies.getElementsByClassName("tag");
-        for(var j = 0; j < tagElems.length; j++) {
+    function parseTaxonomies(baseElem, post) {
+        var generateClickFunction = function (tagParam, catParam) { // wrap in a function to circumvent hoisting
+            return function () {
+                toggleTaxonomy(tagParam, catParam);
+                performFilter(visibleTags, visibleCats);
+            };
+        };
+
+        var tagElems = baseElem.getElementsByClassName("tag");
+        for (var j = 0; j < tagElems.length; j++) {
             var tagElem = tagElems[j];
-            taxonomyList.push(tagElem);
+            tagElem.href = "javascript:void(0);"; // disable href
+
             if (tagElem) {
+                taxonomyList.push(tagElem);
                 var tagClass = tagElem.getAttribute("data-slug");
-                // wrap in a function to circumvent hoisting
-                var generateClickFunction = function(tagParam) {
-                    return function() {
-                        //window.scrollTo(0, 0);
-                        toggleTaxonomy(tagParam, null);
-                    };
-                };
-                tagElem.onclick = generateClickFunction(tagClass);
+                tagElem.onclick = generateClickFunction(tagClass, null);
+
                 var tagPosts = tagTable[tagClass] = (tagTable[tagClass] || []);
-                tagPosts.push({elem: tagElem});
+                tagPosts.push({ post: post, elem: tagElem });
             }
         }
-        var catElems = taxonomies.getElementsByClassName("category");
-        for(var j = 0; j < catElems.length; j++) {
+        var catElems = baseElem.getElementsByClassName("category");
+        for (var j = 0; j < catElems.length; j++) {
             var catElem = catElems[j];
-            taxonomyList.push(catElem);
+            catElem.href = "javascript:void(0);"; // disable href
+
             if (catElem) {
+                taxonomyList.push(catElem);
                 var catClass = catElem.getAttribute("data-slug");
-                // wrap in a function to circumvent hoisting
-                var generateClickFunction = function(catParam) {
-                    return function() {
-                        //window.scrollTo(0, 0);
-                        toggleTaxonomy(null, catParam);
-                    };
-                };
-                catElem.onclick = generateClickFunction(catClass);
+                catElem.onclick = generateClickFunction(null, catClass);
+
                 var catPosts = catTable[catClass] = (catTable[catClass] || []);
-                catPosts.push({elem: catElem});
+                catPosts.push({ post: post, elem: catElem });
             }
         }
     }
@@ -115,44 +125,9 @@ The following part removes duplicated tags and invalid tags like blank tag.
     // parse posts and their taxonomies
     function parsePosts() {
         postList = document.getElementsByClassName("post");
-        for(var i = 0; i < postList.length; i++) {
+        for (var i = 0; i < postList.length; i++) {
             var post = postList[i];
-            var tagElems = post.getElementsByClassName("tag");
-            for(var j = 0; j < tagElems.length; j++) {
-                var tagElem = tagElems[j];
-                taxonomyList.push(tagElem);
-                if (tagElem && tagElem.classList && tagElem.classList.length >= 3) {
-                    var tagClass = tagElem.classList[2];
-                    // wrap in a function to circumvent hoisting
-                    var generateClickFunction = function(tagParam) {
-                        return function() {
-                            //window.scrollTo(0, 0);
-                            toggleTaxonomy(tagParam, null);
-                        };
-                    };
-                    tagElem.onclick = generateClickFunction(tagClass);
-                    var tagPosts = tagTable[tagClass] = (tagTable[tagClass] || []);
-                    tagPosts.push({post: post, elem: tagElem});
-                }
-            }
-            var catElems = post.getElementsByClassName("category");
-            for(var j = 0; j < catElems.length; j++) {
-                var catElem = catElems[j];
-                taxonomyList.push(catElem);
-                if (catElem && catElem.classList && catElem.classList.length >= 3) {
-                    var catClass = catElem.classList[2];
-                    // wrap in a function to circumvent hoisting
-                    var generateClickFunction = function(catParam) {
-                        return function() {
-                            //window.scrollTo(0, 0);
-                            toggleTaxonomy(null, catParam);
-                        };
-                    };
-                    catElem.onclick = generateClickFunction(catClass);
-                    var catPosts = catTable[catClass] = (catTable[catClass] || []);
-                    catPosts.push({post: post, elem: catElem});
-                }
-            }
+            parseTaxonomies(post, post);
         }
     }
 
@@ -181,16 +156,26 @@ The following part removes duplicated tags and invalid tags like blank tag.
             else
                 visibleCats.splice(catIndex, 1);
         }
-        filterBy(visibleTags, visibleCats);
     }
 
-    function filterBy(tags, categories) {
+    function updateHash(tags, cats, search)
+    {
+        var tagString = tags && tags.length ? "_tag-" + tags.join("_tag-") : "";
+        var catString = cats && cats.length ? "_cat-" + cats.join("_cat-") : "";
+        var searchString = search ? "_search-" + search : "";
+
+        var hashString = tagString + catString + searchString;
+        window.location.hash = "#" + hashString.substr(1, hashString.length);
+    }
+
+    function performFilter(tags, categories, search) {
         hideAllPosts();
+        updateHash(tags, categories, search);
         if (tags && tagTable) {
-            for ( var i = 0 ; i < tags.length; i++) {
+            for (var i = 0; i < tags.length; i++) {
                 var tagData = tagTable[tags[i]];
                 if (tagData) {
-                    for(var j = 0; j < tagData.length; j++) {
+                    for (var j = 0; j < tagData.length; j++) {
                         var data = tagData[j];
                         data.elem.classList.remove("disabled");
                         if (data.post) {
@@ -202,10 +187,10 @@ The following part removes duplicated tags and invalid tags like blank tag.
             }
         }
         if (categories && catTable) {
-            for ( var i = 0 ; i < categories.length; i++) {
+            for (var i = 0; i < categories.length; i++) {
                 var catData = catTable[categories[i]];
                 if (catData) {
-                    for(var j = 0; j < catData.length; j++) {
+                    for (var j = 0; j < catData.length; j++) {
                         var data = catData[j];
                         data.elem.classList.remove("disabled");
                         if (data.post) {
@@ -217,4 +202,5 @@ The following part removes duplicated tags and invalid tags like blank tag.
             }
         }
     }
+
 </script>
