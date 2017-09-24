@@ -48,10 +48,12 @@ The following part removes duplicated tags and invalid tags like blank tag.
 {% endfor %}
 
 <div id="taxonomies">
-{% assign localAnchor = true %}
-{% include taxonomies.html %}
 <a href="javascript:void(0);" title="Show All" class="tax hover" id="show-all"><img src="{{ site.baseurl }}/images/icons/show-all.svg" />Show All</a>
 <a href="javascript:void(0);" title="Hide All" class="tax hover" id="hide-all"><img src="{{ site.baseurl }}/images/icons/hide-all.svg" />Hide All</a>
+<a href="javascript:void(0);" title="Clear Search" class="tax hover" id="clear-search"><img src="{{ site.baseurl }}/images/icons/clear-search.svg" />Clear Search</a>
+<br />
+{% assign localAnchor = true %}
+{% include taxonomies.html %}
 </div>
 
 {% assign posts = site.posts %}
@@ -71,14 +73,36 @@ The following part removes duplicated tags and invalid tags like blank tag.
             return _objIdMap.get(object);
         }
         window.addEventListener('load', function () {
+            //// parse hash to perform preliminary filter ////
+            var taxonomies = document.getElementById("taxonomies");
+            parseTaxonomies(taxonomies);
+            parsePosts();
+            var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
+
+            var searchTerm = null;
+            var match;
+            while (match = taxonomyRegexp.exec(window.location.hash)) {
+                if (match[1] == "tag")
+                    toggleTaxonomy(match[2], null);
+                else if (match[1] == "cat")
+                    toggleTaxonomy(null, match[2]);
+                else if (match[1] == "search" && !searchTerm)
+                    searchTerm = match[2];
+            }
+
+            _searchBar = document.getElementById("search-bar");
+            if (_searchBar)
+                _searchBar.value = searchTerm;
+
             //// wire up search bar ////
             var searchForm = document.getElementById("search-form");
             if (searchForm) {
                 searchForm.onsubmit = function () {
                     var _searchBar = document.getElementById("search-bar");
-                    if (_searchBar && _searchBar.value) {
-                        performFilter();
-                    }
+                    var searchTerm = _searchBar && _searchBar.value;
+                    if (searchTerm && !_visibleTags.length && !_visibleCats.length)
+                        showAll(); // show all taxonomies if there is a search term, but none are visible to start
+                    performFilter();
                     return false;
                 };
             }
@@ -101,26 +125,16 @@ The following part removes duplicated tags and invalid tags like blank tag.
                 };
             }
 
-            //// parse hash to perform preliminary filter ////
-            var taxonomies = document.getElementById("taxonomies");
-            parseTaxonomies(taxonomies);
-            parsePosts();
-            var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
-
-            var searchTerm = null;
-            var match;
-            while (match = taxonomyRegexp.exec(window.location.hash)) {
-                if (match[1] == "tag")
-                    toggleTaxonomy(match[2], null);
-                else if (match[1] == "cat")
-                    toggleTaxonomy(null, match[2]);
-                else if (match[1] == "search" && !searchTerm)
-                    searchTerm = match[2];
+            //// wire up clear search button ////
+            var clearSearchButton = document.getElementById("clear-search");
+            if (clearSearchButton) {
+                clearSearchButton.onclick = function() {
+                    _searchBar.value = "";
+                    performFilter();
+                };
             }
 
-            _searchBar = document.getElementById("search-bar");
-            if (_searchBar)
-                _searchBar.value = searchTerm;
+            //// perform start filter ////
 
             if (searchTerm && !_visibleTags.length && !_visibleCats.length)
                 showAll(); // show all taxonomies if there is a search term, but none are visible to start
