@@ -77,16 +77,16 @@ The following part removes duplicated tags and invalid tags like blank tag.
             var taxonomies = document.getElementById("taxonomies");
             parseTaxonomies(taxonomies);
             parsePosts();
-            var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
+            var taxonomyRegexp = /[#_]({{site.tag_prefix}}|{{site.category_prefix}}|{{site.search_prefix}})-([^\s#_]+)/g;
 
             var searchTerm = null;
             var match;
             while (match = taxonomyRegexp.exec(window.location.hash)) {
-                if (match[1] == "tag")
+                if (match[1] == "{{site.tag_prefix}}")
                     toggleTaxonomy(match[2], null);
-                else if (match[1] == "cat")
+                else if (match[1] == "{{site.category_prefix}}")
                     toggleTaxonomy(null, match[2]);
-                else if (match[1] == "search" && !searchTerm)
+                else if (match[1] == "{{site.search_prefix}}" && !searchTerm)
                     searchTerm = match[2];
             }
 
@@ -289,9 +289,9 @@ The following part removes duplicated tags and invalid tags like blank tag.
 
         // updates the hash in the page's URL to reflect the specified tags, categories, and search term
         function updateHash(tags, cats, search) {
-            var tagString = tags && tags.length ? "_tag-" + tags.join("_tag-") : "";
-            var catString = cats && cats.length ? "_cat-" + cats.join("_cat-") : "";
-            var searchString = search ? "_search-" + search : "";
+            var tagString = tags && tags.length ? "_{{site.tag_prefix}}-" + tags.join("_t-") : "";
+            var catString = cats && cats.length ? "_{{site.category_prefix}}-" + cats.join("_c-") : "";
+            var searchString = search ? "_{{site.search_prefix}}-" + search : "";
 
             var hashString = tagString + catString + searchString;
             window.location.hash = "#" + hashString.substr(1, hashString.length);

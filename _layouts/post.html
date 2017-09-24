@@ -25,7 +25,7 @@ layout: default
         searchForm.onsubmit = function() {
           var searchBar = document.getElementById("search-bar");
           if (searchBar && searchBar.value) {
-            window.location.href = "{{site.baseurl}}/filter#search-" + searchBar.value;
+            window.location.href = "{{site.baseurl}}/filter#{{site.search_prefix}}-" + searchBar.value;
           }
           return false;
         };
