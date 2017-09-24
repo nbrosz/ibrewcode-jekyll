@@ -50,157 +50,250 @@ The following part removes duplicated tags and invalid tags like blank tag.
 <div id="taxonomies">
 {% assign localAnchor = true %}
 {% include taxonomies.html %}
+<a href="javascript:void(0);" title="Show All" class="tax hover" id="show-all"><img src="{{ site.baseurl }}/images/icons/show-all.svg" />Show All</a>
+<a href="javascript:void(0);" title="Hide All" class="tax hover" id="hide-all"><img src="{{ site.baseurl }}/images/icons/hide-all.svg" />Hide All</a>
 </div>
 
 {% assign posts = site.posts %}
-{% assign postStyle = "display: none;" %}
+{% assign hidePosts = true %}
 {% include posts.html %}
 
 <script>
-    window.addEventListener('load', function (){
-        var taxonomies = document.getElementById("taxonomies");
+    (function () {
+        var _tagTable = {}, _catTable = {}, _postList = [], _taxonomyList = [], _tagList = [], _catList = [], _visibleTags = [], _visibleCats = [], _searchBar = null;
 
-        parseTaxonomies(taxonomies);
-        parsePosts();
-        var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
-
-        var searchTerm = null;
-        var match;
-        while (match = taxonomyRegexp.exec(window.location.hash)) {
-            if (match[1] == "tag")
-                toggleTaxonomy(match[2], null);
-            else if (match[1] == "cat")
-                toggleTaxonomy(null, match[2]);
-            else if (match[1] == "search" && !searchTerm)
-                searchTerm = match[2];
+        // https://stackoverflow.com/a/35306050/4597249
+        // Note that object must be an object or array,
+        // NOT a primitive value like string, number, etc.
+        var _objIdMap = new WeakMap, _objectCount = 0;
+        function objectId(object) {
+            if (!_objIdMap.has(object)) _objIdMap.set(object, ++_objectCount);
+            return _objIdMap.get(object);
         }
+        window.addEventListener('load', function () {
+            //// wire up search bar ////
+            var searchForm = document.getElementById("search-form");
+            if (searchForm) {
+                searchForm.onsubmit = function () {
+                    var _searchBar = document.getElementById("search-bar");
+                    if (_searchBar && _searchBar.value) {
+                        performFilter();
+                    }
+                    return false;
+                };
+            }
 
-        performFilter(visibleTags, visibleCats, searchTerm);
+            //// wire up show all button ////
+            var showAllButton = document.getElementById("show-all");
+            if (showAllButton) {
+                showAllButton.onclick = function() {
+                    showAll();
+                    performFilter();
+                };
+            }
 
-        //if (searchTerm)
-            //performSearch(searchTerm);
-    });
+            //// wire up hide all button ////
+            var hideAllButton = document.getElementById("hide-all");
+            if (hideAllButton) {
+                hideAllButton.onclick = function() {
+                    hideAll();
+                    performFilter();
+                };
+            }
 
-    var tagTable = {}, catTable = {}, postList = [], taxonomyList = [], visibleTags = [], visibleCats = [];
+            //// parse hash to perform preliminary filter ////
+            var taxonomies = document.getElementById("taxonomies");
+            parseTaxonomies(taxonomies);
+            parsePosts();
+            var taxonomyRegexp = /[#_](tag|cat|search)-([^\s#_]+)/g;
 
-    // parse tags/categories for full taxonomies list at top of page
-    function parseTaxonomies(baseElem, post) {
-        var generateClickFunction = function (tagParam, catParam) { // wrap in a function to circumvent hoisting
-            return function () {
-                toggleTaxonomy(tagParam, catParam);
-                performFilter(visibleTags, visibleCats);
+            var searchTerm = null;
+            var match;
+            while (match = taxonomyRegexp.exec(window.location.hash)) {
+                if (match[1] == "tag")
+                    toggleTaxonomy(match[2], null);
+                else if (match[1] == "cat")
+                    toggleTaxonomy(null, match[2]);
+                else if (match[1] == "search" && !searchTerm)
+                    searchTerm = match[2];
+            }
+
+            _searchBar = document.getElementById("search-bar");
+            if (_searchBar)
+                _searchBar.value = searchTerm;
+
+            if (searchTerm && !_visibleTags.length && !_visibleCats.length)
+                showAll(); // show all taxonomies if there is a search term, but none are visible to start
+
+            performFilter();
+        });
+
+        // parse tags/categories for full taxonomies list at top of page
+        function parseTaxonomies(baseElem, post) {
+            if (!baseElem)
+                return;
+
+            var generateClickFunction = function (tagParam, catParam) { // wrap in a function to circumvent hoisting
+                return function () {
+                    toggleTaxonomy(tagParam, catParam);
+                    performFilter();
+                };
             };
-        };
 
-        var tagElems = baseElem.getElementsByClassName("tag");
-        for (var j = 0; j < tagElems.length; j++) {
-            var tagElem = tagElems[j];
-            tagElem.href = "javascript:void(0);"; // disable href
+            var tagElems = baseElem.getElementsByClassName("tag");
+            for (var j = 0; j < tagElems.length; j++) {
+                var tagElem = tagElems[j];
+                tagElem.href = "javascript:void(0);"; // disable href
 
-            if (tagElem) {
-                taxonomyList.push(tagElem);
-                var tagClass = tagElem.getAttribute("data-slug");
-                tagElem.onclick = generateClickFunction(tagClass, null);
+                if (tagElem) {
+                    _taxonomyList.push(tagElem);
+                    var tagClass = tagElem.getAttribute("data-slug");
+                    tagElem.onclick = generateClickFunction(tagClass, null);
 
-                var tagPosts = tagTable[tagClass] = (tagTable[tagClass] || []);
-                tagPosts.push({ post: post, elem: tagElem });
+                    if (_tagList.indexOf(tagClass) == -1)
+                        _tagList.push(tagClass);
+                    var tagPosts = _tagTable[tagClass] = (_tagTable[tagClass] || []);
+                    tagPosts.push({ post: post, elem: tagElem });
+                }
+            }
+            var catElems = baseElem.getElementsByClassName("category");
+            for (var j = 0; j < catElems.length; j++) {
+                var catElem = catElems[j];
+                catElem.href = "javascript:void(0);"; // disable href
+
+                if (catElem) {
+                    _taxonomyList.push(catElem);
+                    var catClass = catElem.getAttribute("data-slug");
+                    catElem.onclick = generateClickFunction(null, catClass);
+
+                    if (_catList.indexOf(catClass) == -1)
+                        _catList.push(catClass);
+                    var catPosts = _catTable[catClass] = (_catTable[catClass] || []);
+                    catPosts.push({ post: post, elem: catElem });
+                }
             }
         }
-        var catElems = baseElem.getElementsByClassName("category");
-        for (var j = 0; j < catElems.length; j++) {
-            var catElem = catElems[j];
-            catElem.href = "javascript:void(0);"; // disable href
 
-            if (catElem) {
-                taxonomyList.push(catElem);
-                var catClass = catElem.getAttribute("data-slug");
-                catElem.onclick = generateClickFunction(null, catClass);
-
-                var catPosts = catTable[catClass] = (catTable[catClass] || []);
-                catPosts.push({ post: post, elem: catElem });
+        // parse posts and their taxonomies
+        function parsePosts() {
+            _postList = document.getElementsByClassName("post");
+            for (var i = 0; i < _postList.length; i++) {
+                var post = _postList[i];
+                parseTaxonomies(post, post);
+                var postTitle = post.getElementsByClassName("title")[0];
+                var postEntry = post.getElementsByClassName("entry")[0];
+                post.titleElem = postTitle;
+                post.entryElem = postEntry;
             }
         }
-    }
 
-    // parse posts and their taxonomies
-    function parsePosts() {
-        postList = document.getElementsByClassName("post");
-        for (var i = 0; i < postList.length; i++) {
-            var post = postList[i];
-            parseTaxonomies(post, post);
+        // toggle the given taxonomy (tag or category) on/off and update the list of visible tags/categories
+        function toggleTaxonomy(tag, category) {
+            if (tag) {
+                var tagIndex = _visibleTags.indexOf(tag);
+                if (tagIndex == -1)
+                    _visibleTags.push(tag);
+                else
+                    _visibleTags.splice(tagIndex, 1);
+            } else if (category) {
+                var catIndex = _visibleCats.indexOf(category);
+                if (catIndex == -1)
+                    _visibleCats.push(category);
+                else
+                    _visibleCats.splice(catIndex, 1);
+            }
         }
-    }
 
-    function hideAllPosts() {
-        for (var i = 0; i < postList.length; i++) {
-            postList[i].classList.add("hidden");
-            postList[i].classList.remove("visible");
-            postList[i].removeAttribute("style"); // remove any initial styling
+        function showAll() {
+             // shallow copy lists
+                _visibleTags = _tagList.slice(0);
+                _visibleCats = _catList.slice(0);
         }
-        for (var i = 0; i < taxonomyList.length; i++) {
-            taxonomyList[i].classList.add("disabled");
+
+        function hideAll() {
+             // clear visible lists
+                _visibleTags = [];
+                _visibleCats = [];
         }
-    }
 
-    function toggleTaxonomy(tag, category) {
-        if (tag) {
-            var tagIndex = visibleTags.indexOf(tag);
-            if (tagIndex == -1)
-                visibleTags.push(tag);
-            else
-                visibleTags.splice(tagIndex, 1);
-        } else if (category) {
-            var catIndex = visibleCats.indexOf(category);
-            if (catIndex == -1)
-                visibleCats.push(category);
-            else
-                visibleCats.splice(catIndex, 1);
+        // perform filtering and update the hash based on the latest search term and visible taxonomies
+        function performFilter() {
+            var searchTerm = (_searchBar && _searchBar.value) || null;
+
+            filterBy(_visibleTags, _visibleCats, searchTerm);
+            updateHash(_visibleTags, _visibleCats, searchTerm);
         }
-    }
 
-    function updateHash(tags, cats, search)
-    {
-        var tagString = tags && tags.length ? "_tag-" + tags.join("_tag-") : "";
-        var catString = cats && cats.length ? "_cat-" + cats.join("_cat-") : "";
-        var searchString = search ? "_search-" + search : "";
-
-        var hashString = tagString + catString + searchString;
-        window.location.hash = "#" + hashString.substr(1, hashString.length);
-    }
-
-    function performFilter(tags, categories, search) {
-        hideAllPosts();
-        updateHash(tags, categories, search);
-        if (tags && tagTable) {
+        // filter posts and taxonomies by the given tags, categories, and search term
+        function filterBy(tags, categories, search) {
+            var shownPostsTable = {}, shownTag_catTable = {};
             for (var i = 0; i < tags.length; i++) {
-                var tagData = tagTable[tags[i]];
+                var tagData = _tagTable[tags[i]];
                 if (tagData) {
                     for (var j = 0; j < tagData.length; j++) {
                         var data = tagData[j];
-                        data.elem.classList.remove("disabled");
-                        if (data.post) {
-                            data.post.classList.remove("hidden");
-                            data.post.classList.add("visible");
-                        }
+                        if (data.post)
+                            shownPostsTable[objectId(data.post)] = data.post;
+                        if (data.elem)
+                            shownTag_catTable[objectId(data.elem)] = data.elem;
                     }
                 }
             }
-        }
-        if (categories && catTable) {
             for (var i = 0; i < categories.length; i++) {
-                var catData = catTable[categories[i]];
+                var catData = _catTable[categories[i]];
                 if (catData) {
                     for (var j = 0; j < catData.length; j++) {
                         var data = catData[j];
-                        data.elem.classList.remove("disabled");
-                        if (data.post) {
-                            data.post.classList.remove("hidden");
-                            data.post.classList.add("visible");
-                        }
+                        if (data.post)
+                            shownPostsTable[objectId(data.post)] = data.post;
+                        if (data.elem)
+                            shownTag_catTable[objectId(data.elem)] = data.elem;
                     }
                 }
             }
-        }
-    }
 
+            for (var i = 0; i < _taxonomyList.length; i++) {
+                var shownTagCat = shownTag_catTable[objectId(_taxonomyList[i])];
+                if (shownTagCat) {
+                    _taxonomyList[i].classList.remove("disabled");
+                } else {
+                    _taxonomyList[i].classList.add("disabled");
+                }
+            }
+
+            for (var i = 0; i < _postList.length; i++) {
+                var shownPost = shownPostsTable[objectId(_postList[i])];
+                if (shownPost && (!search || postFilterSuccess(_postList[i], search))) {
+                    _postList[i].classList.remove("hidden");
+                    _postList[i].classList.add("visible");
+                } else {
+                    _postList[i].classList.add("hidden");
+                    _postList[i].classList.remove("visible");
+                }
+            }
+        }
+
+        // updates the hash in the page's URL to reflect the specified tags, categories, and search term
+        function updateHash(tags, cats, search) {
+            var tagString = tags && tags.length ? "_tag-" + tags.join("_tag-") : "";
+            var catString = cats && cats.length ? "_cat-" + cats.join("_cat-") : "";
+            var searchString = search ? "_search-" + search : "";
+
+            var hashString = tagString + catString + searchString;
+            window.location.hash = "#" + hashString.substr(1, hashString.length);
+        }
+
+        // does the post pass filtering by the specified term?
+        function postFilterSuccess(post, term) {
+            if (!term)
+                return true;
+
+            if (term) {
+                var titleMatch = post.titleElem.innerText.toLowerCase().indexOf(term.toLowerCase()) != -1;
+                var entryMatch = post.entryElem.innerHTML.toLowerCase().indexOf(term.toLowerCase()) != -1;
+
+                return titleMatch || entryMatch;
+            }
+        }
+    })();
 </script>

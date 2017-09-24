@@ -269,9 +269,57 @@ nav {
 
 .strike {
   text-decoration: line-through;
-  text-decoration-color: lightgray;
-  color: lightgray;
+  text-decoration-color: #AAAAAA;
+  color: #AAAAAA;
 }
+
+.search {
+  float: right;
+  margin-top: 18px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  border-radius: 16px;
+  vertical-align: middle;
+  border-style: solid;
+  border-width: 2px;
+  border-color: lightgray;
+  overflow: hidden;
+  width: 30%;
+
+  @include mobile {
+    float: none;
+    margin-top: 9px;
+    display: block;
+    font-size: 16px;
+  }
+
+  input[type="text"] {
+    outline-width: 0;
+    border: 0;
+    padding: 4px;
+    width: 85%;
+    padding-left: 8px;
+  }
+
+  input[type="submit"] {
+    width: 15%;
+    background-image: url(/images/search.svg);
+    background-repeat: no-repeat;
+    background-color: #fff;
+    background-position: center;
+    outline-width: 0;
+    border: 0;
+    vertical-align: middle;
+    cursor: pointer;
+  }
+
+  @include mobile {
+    width: 50%;
+    margin-left:auto;
+    margin-right:auto;
+  }
+}
+
 //
 // .main
 //
@@ -311,7 +359,7 @@ nav {
   }
 }
 
-.tag, .category {
+.tag, .category, .tax {
   color: black;
   margin: 0 0 5px 0;
   display: inline-block;
@@ -333,14 +381,14 @@ nav {
   display: initial;
 }
 
-.tag img, .category img {
+.tag img, .category img, .tax img {
   width: auto;
   height: 12pt;
   margin-right: 5px;
   vertical-align: middle;
 }
 
-.tag:hover, .category:hover {
+.tag:hover, .category:hover, .tax:hover {
   color: black;
 }
 
@@ -350,6 +398,10 @@ nav {
 
 .category {
   background-color: #96F481;
+}
+
+.tax {
+  background-color: #F4AF81;
 }
 
 .disabled {

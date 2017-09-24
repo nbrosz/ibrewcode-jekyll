@@ -51,3 +51,18 @@ layout: default
   <span class="button disabled">&#187;</span>
   {% endif %}
 </div>
+
+<script>
+  window.addEventListener("load", function() {
+    var searchForm = document.getElementById("search-form");
+    if (searchForm) {
+      searchForm.onsubmit = function() {
+        var searchBar = document.getElementById("search-bar");
+        if (searchBar && searchBar.value) {
+          window.location.href = "{{site.baseurl}}/filter#search-" + searchBar.value;
+        }
+        return false;
+      };
+    }
+  });
+</script>

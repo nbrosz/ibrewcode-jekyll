@@ -5,10 +5,8 @@ layout: default
 <article class="post">
 
   <h1>{{ page.title }}</h1>
-  <div class="date">
-    Written on {% if page.modified_date AND page.modified_date > page.date %}<span class="strike">{% endif %}{{ page.date | date: "%B %e, %Y" }}{%if page.modified_date AND page.modified_date > page.date %}</span> {{ page.modified_date | date: "%B %e, %Y" }}{% endif %}
-  </div>
   {% assign post = page %}
+  {% include post-date.html %}
   {% assign categories = post.categories %}
   {% assign tags = post.tags %}
   {% include taxonomies.html %}
@@ -19,3 +17,18 @@ layout: default
 
   {% include disqus.html %}
 </article>
+
+<script>
+    window.addEventListener("load", function() {
+      var searchForm = document.getElementById("search-form");
+      if (searchForm) {
+        searchForm.onsubmit = function() {
+          var searchBar = document.getElementById("search-bar");
+          if (searchBar && searchBar.value) {
+            window.location.href = "{{site.baseurl}}/filter#search-" + searchBar.value;
+          }
+          return false;
+        };
+      }
+    });
+  </script>

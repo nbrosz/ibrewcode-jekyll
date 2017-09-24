@@ -1,10 +1,8 @@
 <div class="posts">
     {% for post in posts %}
-      <article class="post" {% if postStyle %}style="{{postStyle}}"{% endif %}>
-        <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-        <div class="date">
-          Written on {% if post.modified_date %}<span class="strike">{% endif %}{{ post.date | date: "%B %e, %Y" }}{%if post.modified_date %}</span> {{ post.modified_date | date: "%B %e, %Y" }}{% endif %}
-        </div>
+      <article class="post {% if hidePosts %}hidden{% endif %}">
+        <h1><a class="title" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+        {% include post-date.html %}
         {% assign categories = post.categories %}
         {% assign tags = post.tags %}
         {% include taxonomies.html %}

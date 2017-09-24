@@ -3,14 +3,14 @@ layout: post
 title: Yet Another Test
 categories: [Testing, Game Dev, Jekyll, Random]
 tags: [Testing, Jekyll, Random, Ipsum]
-modified_date: "2017-09-11T20:47:31+08:00"
+modified_date: "2017-09-20T20:47:31+08:00"
 ---
 
 Bacon ipsum dolor amet brisket tenderloin sirloin, picanha kevin pork belly salami prosciutto. Cupim flank hamburger, pork loin short ribs sausage venison beef strip steak frankfurter shoulder ground round pork belly jowl leberkas. Cupim shoulder landjaeger chuck brisket t-bone. Shoulder venison pig t-bone drumstick pork loin salami flank frankfurter short loin. Sausage tongue drumstick, ribeye spare ribs beef ribs pork chop. Ribeye pork belly frankfurter capicola hamburger. Turducken sausage filet mignon, t-bone brisket drumstick tri-tip kevin boudin pork.
 
 <!--excerpt-->
 
-> If you want to make something that doesn't suck, don't do stupid things.
+> A wise man once said, "A wise man once said, "A wise man once said, "A wise man once said."""
 
 Burgdoggen prosciutto bresaola capicola turkey kevin ham hock pork loin. Filet mignon pancetta shankle pig bacon ham short ribs ground round kielbasa picanha porchetta boudin. Short loin landjaeger turkey beef filet mignon brisket pork, tenderloin kielbasa ribeye. Picanha bresaola doner pastrami, ribeye cupim capicola drumstick rump tri-tip. Burgdoggen tongue alcatra pork swine shank pancetta. Pig kielbasa swine corned beef filet mignon pancetta landjaeger ground round venison jowl andouille spare ribs cow sirloin. Pig burgdoggen ball tip sirloin, doner shank pork belly swine short loin tail.
 
