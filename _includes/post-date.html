@@ -1,7 +1,11 @@
 {% assign postDateInSeconds = post.date | date: "%s" %}
 {% assign postModifiedDateInSeconds = post.last_modified_at | date: "%s" %}
+{% assign postAuthor = post.author %}
+{% unless postAuthor %}
+{% assign postAuthor = site.author %}
+{% endunless %}
 <div class="date">
-    <span title="Written on {{ post.date | date: "%B %e, %Y" }}{% if postDateInSeconds < postModifiedDateInSeconds %} and edited on {{ post.last_modified_at | date: "%B %e, %Y" }}{% endif %}">
-        {% if postDateInSeconds < postModifiedDateInSeconds %}<span class="strike">{% endif %}{{ post.date | date: "%B %e, %Y" }}{%if postDateInSeconds < postModifiedDateInSeconds %}</span> {{ post.last_modified_at | date: "%B %e, %Y" }}{% endif %}
+    <span title="Written on {{ post.date | date: "%B %e, %Y" }}{% if postDateInSeconds < postModifiedDateInSeconds %} and edited on {{ post.last_modified_at | date: "%B %e, %Y" }}{% endif %} by {{postAuthor}}">
+        {% if postDateInSeconds < postModifiedDateInSeconds %}<span class="strike">{% endif %}{{ post.date | date: "%B %e, %Y" }}{%if postDateInSeconds < postModifiedDateInSeconds %}</span> {{ post.last_modified_at | date: "%B %e, %Y" }}{% endif %} by {{ postAuthor }}
     </span>
 </div>

@@ -1,17 +1,20 @@
 <div class="posts">
-    {% for post in posts %}
-      <article class="post {% if hidePosts %}hidden{% endif %}">
-        <h1><a class="title" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
-        {% include post-date.html %}
-        {% assign categories = post.categories %}
-        {% assign tags = post.tags %}
-        {% include taxonomies.html %}
-        <hr />
-        <div class="entry">
-          {{ post.excerpt }}
-        </div>
-  
-        <a href="{{ site.baseurl }}{{ post.url }}" class="read-more hover">Read More</a>
-      </article>
-    {% endfor %}
-  </div>
+  {% for post in posts %}
+  <article class="{% if hidePosts %}hidden{% endif %}">
+    <div class="post">
+      <h1><a class="title" href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
+      {% include post-date.html %}
+      {% assign categories = post.categories %}
+      {% assign tags = post.tags %}
+      {% include taxonomies.html %}
+      <hr />
+      <div class="entry">
+        {{ post.excerpt }}
+      </div>
+      <hr />
+      <a href="{{ site.baseurl }}{{ post.url }}" class="read-more"><span class="down-arrow">&#x25BC;</span> <span class="read-more-text">Read More</span> <span class="down-arrow">&#x25BC;</span></a>      
+    </div>
+  </article>
+  <div></div>
+  {% endfor %}
+</div>
