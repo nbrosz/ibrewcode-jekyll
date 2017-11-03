@@ -1,4 +1,9 @@
+.idea
+.DS_Store
+.sass-cache
 _site
+node_modules
+_drafts
 .DS_Store
 .jekyll
 .jekyll-metadata
