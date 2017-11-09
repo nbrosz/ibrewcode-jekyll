@@ -1,0 +1,9 @@
+{% assign page_slug = include.post.slug %}
+{% unless page_slug %}{% assign page_slug = include.post.title | slugify %}{% endunless %}
+{% assign page_slug = page_slug | downcase %}
+{% capture media %}{{ site.baseurl }}{{ site.media }}{{ page_slug }}/{% endcapture %}
+{% for series in site.series %}
+    {% if series.slug == include.post.series %}
+        {% assign post_series = series %}
+    {% endif %}
+{% endfor %}

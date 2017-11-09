@@ -8,7 +8,7 @@
         {% include svg-icons.html %}
         {% include header.html %}
         <section class="post">
-
+            {% include postdata.html post=page %}
             <article role="article" id="post" class="post-content" itemprop="articleBody">
                 <p itemprop="post-info" class="post-info">
                     {% if page.date %}
@@ -25,6 +25,10 @@
                     <svg id="category" class="icon-category"><use xlink:href="#icon-category"></use></svg>
                     <span><a href="{{ site.baseurl }}/category/{{ page.category | slugify }}">{{ page.category }}</a></span>
                     {% endif %}
+                    {% if page.series %}
+                    <svg id="series" class="icon-series"><use xlink:href="#icon-series"></use></svg>
+                    <span><a href="{{ site.baseurl }}{{ post_series.permalink }}">{{ post_series.series }}</a></span>
+                    {% endif %}
                     {% if page.tags and page.tags.size > 0 %}
                     <svg id="tag" class="icon-tag"><use xlink:href="#icon-tag"></use></svg>
                     <span>
@@ -35,14 +39,43 @@
                     {% endif %}
                 </p>
                 <h1 class="post-title" itemprop="name">{{ page.title }}</h1>
-                <p itemprop="description" class="subtitle">{{ page.description }}</p>
+                <p itemprop="description" class="subtitle">{% if page.description %}{{ page.description }}{% else %}{{ page.introduction }}{% endif %}</p>
 
                 {% if page.image %}
-                    <img src="{{ page.image }}" alt="Imagem de capa" class="post-cover">
+                    <img src="{{ media }}{{ page.image }}" alt="Post banner" class="post-cover">
                 {% endif %}
 
                 {{ content }}
             </article>
+
+            {% if page.series %}
+                {% assign sorted_site_posts = site.posts | sort: 'date' %}
+
+                {% for this_post in sorted_site_posts %}
+                    {% if this_post.series and this_post.series == page.series %}
+                        {% if reached_current_post %}
+                            {% unless next_post %}
+                                {% assign next_post = this_post %}
+                            {% endunless %}
+                        {% endif %}
+                        {% if this_post == page %}
+                            {% assign reached_current_post = true %}
+                        {% endif %}
+                        {% unless reached_current_post %}
+                            {% assign prev_post = this_post %}
+                        {% endunless %}
+
+                    {% endif %}
+                {% endfor %}
+                <div class="series-links cf">
+                    {% if prev_post %}
+                    <div style="float: left;">&#10096;&#10096; <a href="{{ prev_post.url | prepend: site.baseurl }}" title="Previous post in {{ page.series }}">{{prev_post.title}}</a></div>
+                    {% endif %}
+                    {% if next_post %}
+                    <div style="float: right; text-align: right"><a href="{{ next_post.url | prepend: site.baseurl }}" title="Next post in {{ page.series }}">{{next_post.title}}</a> &#10097;&#10097;</div>
+                    {% endif %}
+                </div>
+            {% endif %}
 
             {% comment %}
             <div class="progress-bar" data-minutes="{{ totalMinutes }}">

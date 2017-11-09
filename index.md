@@ -6,17 +6,29 @@ layout: main
     <div id="grid" class="row flex-grid">
     {% for post in site.posts %}
         <article class="box-item" itemscope="itemscope" itemtype="http://schema.org/BlogPosting" itemprop="blogPost">
-            <span class="category">
-                <a href="{{ site.baseurl }}/category/{{ post.category | slugify }}">
-                    <span>{{ post.category }}</span>
-                </a>
+            <span class="cf">
+                {% if post.category %}
+                <span class="category {% if post.series %}shared{% endif %}">
+                    <a href="{{ site.baseurl }}/category/{{ post.category | slugify }}" title="{{ post.category }}">
+                        <span>{{ post.category }}</span>
+                    </a>
+                </span>
+                {% endif %}
+                {% if post.series %}
+                {% include postdata.html post=post %}
+                <span class="series {% if post.category %}shared{% endif %}">
+                    <a href="{{ site.baseurl }}{{ post_series.permalink }}" title="{{ post_series.series }}">
+                        <span>{{ post_series.series }}</span>
+                    </a>
+                </span>
+                {% endif %}
             </span>
             <div class="box-body">
                 {% if post.image %}
                     <div class="cover">
                         {% include new-post-tag.html date=post.date %}
                         <a href="{{ post.url | prepend: site.baseurl }}" {%if isnewpost %}class="new-post"{% endif %}>
-                            <img src="assets/img/placeholder.png" data-url="{{ post.image }}" class="preload">
+                            <img src="assets/img/placeholder.png" data-url="{{ site.baseurl }}{{ site.media }}{{ post.title | slugify }}/{{ post.image }}" class="preload">
                         </a>
                     </div>
                 {% endif %}

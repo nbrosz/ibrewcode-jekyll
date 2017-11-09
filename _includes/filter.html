@@ -1,33 +1,55 @@
 <div class="tag-filter">
     {% if page.category %}
-    <h1>Filed Under <small>#{{ page.category }}</small></h1>
+    <h1>Filed Under {{ page.category }}</h1>
+    {% elsif page.series %}
+    <h1>Part of {{ page.series }}</h1>
+    {% else %}
+    <h1>Tags</h1>
     {% endif %}
 
-    <div class="tags">
-    {% assign tags_list = site.tags %}
-    {% if tags_list.first[0] == null %}
-        {% for tag in tags_list %}
-            <a href="#{{ tag | slugify }}" data-tag-name="tag-{{ tag | slugify }}" {% if page.category %} data-category-name="cat-{{page.category | slugify}}" {% endif %}>{{ tag }}</a>
-        {% endfor %}
-    {% else %}
-        {% for tag in tags_list %}
-            <a href="#{{ tag[0] | slugify }}" data-tag-name="tag-{{ tag[0] | slugify }}" {% if page.category %} data-category-name="cat-{{page.category | slugify}}" {% endif %}>{{ tag[0] }}</a>
-        {% endfor %}
-    {% endif %}
-    {% assign tags_list = nil %}
-    </div>
+    {% unless page.series %}
+        <div class="tags">
+        {% assign tags_list = site.tags %}
+        {% if tags_list.first[0] == null %}
+            {% for tag in tags_list %}
+                <a href="#{{ tag | slugify }}" data-tag-name="tag-{{ tag | slugify }}" {% if page.category %} data-category-name="cat-{{page.category | slugify}}" {% endif %}>{{ tag }}</a>
+            {% endfor %}
+        {% else %}
+            {% for tag in tags_list %}
+                <a href="#{{ tag[0] | slugify }}" data-tag-name="tag-{{ tag[0] | slugify }}" {% if page.category %} data-category-name="cat-{{page.category | slugify}}" {% endif %}>{{ tag[0] }}</a>
+            {% endfor %}
+        {% endif %}
+        {% assign tags_list = nil %}
+        </div>
+    {% endunless %}
 
     <ul class="post-list">
-    {% for post in site.posts %}
-        {% if page.category == null or page.category == post.category %}
+    {% if page.series %}
+        {% assign post_list = site.posts | sort: 'date' %}
+    {% else %}
+        {% assign post_list = site.posts %}
+    {% endif %}
+    {% for post in post_list %}
+        {% assign post_match = true %}
+        
+        {% if page.category == null and page.series == null %}
+        {% elsif page.category and page.category == post.category %}
+        {% elsif page.series and page.slug == post.series %}
+        {% else %}
+            {% assign post_match = false %}
+        {% endif %}
+
+        {% if post_match %}
             {% if group == null or group == post.group %}
             <li class="{% for tag in post.tags %} tag-{{ tag | slugify }} {% endfor %}">
-                <a href="{{ site.url }}{{ post.url }}" class="cf">{{ post.title }}
+                <a href="{{ site.baseurl }}{{ post.url }}" class="cf">{{ post.title }}
                     <span class="entry-date">
+                        <time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%m/%d/%Y" }}</time>
+                    </span>
+                    <span class="entry-tags">
                         {% for tag in post.tags %}
                             <span class="tag-pip">{{tag}}</span>
                         {% endfor %}
-                        <time datetime="{{ post.date | date_to_xmlschema }}" itemprop="datePublished">{{ post.date | date: "%m/%d/%Y" }}</time>
                     </span>
                 </a>
             </li>

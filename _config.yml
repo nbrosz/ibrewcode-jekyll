@@ -1,6 +1,6 @@
 # Site Settings
 title: I Brew Code
-tagline: Bugfixing my life
+tagline: Developing my life
 logo: i<span class='alt'>brew</span>code
 email: contact@ibrewcode.com
 description: Programming and probably more.
@@ -12,6 +12,8 @@ google_analytics: "UA-108800182-1"
 username: "Nic Brosz"
 user_description: A new software developer jumping into the wild world of code.
 disqus_username: i-brew-code
+
+media: /media/posts/
 
 # Social Media
 # Remove the item if you don't need it
@@ -75,6 +77,10 @@ exclude:
 collections:
   category:
     output: true
+    # permalink: /category/:path
+  series:
+    output: true
+    # permalink: /series/:path
 
 defaults:
   -
@@ -83,3 +89,9 @@ defaults:
       type: category
     values:
       layout: "category"
+  -
+    scope:
+      path: ""
+      type: series
+    values:
+      layout: "series"

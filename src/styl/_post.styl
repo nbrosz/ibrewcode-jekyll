@@ -5,6 +5,15 @@
     +above(cut)
         top rem(50px)
 
+    .series-links
+        font-size 18pt
+        a, &:visited
+            color secondaryColor
+            text-decoration none
+            &:hover
+                text-decoration underline
+                color texts
+
 .post-content
     padding rem(40px) 0
     img
@@ -19,12 +28,20 @@
             margin-bottom rem(20px)
             +above(cut)
                 margin-bottom rem(29px)
+        &.left
+            +above(cut)
+                float left
+                padding 1em 1em 1em 0
+        &.right
+            +above(cut)
+                float right
+                padding 1em 1em 0 1em
     img + em
         display block
         color darken(lightGray,30%)
         text-align center
         mainFont(300)
-    p, h1, h2, h3, h4, h5, h6, ul, ol, iframe
+    p, h1, h2, h3, h4, h5, h6, ul, ol, iframe, & + .series-links
         center(rem(800px))
         mainFont(400)
         font-size rem(18px)
@@ -64,6 +81,10 @@
             margin-right rem(10px)
             +above(cut)
                 margin-right rem(30px)
+        a
+            color netflixRed
+            &:hover
+                color darken(lightGray,30%)
     li 
         padding rem(10px) 0
         ul 
@@ -77,10 +98,11 @@
             padding rem(3px) rem(5px)
             border-radius 3px
             font-size rem(18px)
-    a
-        color #0000ee
+    a, &:visited
+        color secondaryColor
         text-decoration none
         &:hover
+            color texts
             text-decoration underline
     iframe
         margin-top rem(30px)
@@ -167,7 +189,7 @@
         float left
         display block
         height 8px
-        background-color themeColor
+        background-color secondaryColor
     .remaining
         float left
         display block
@@ -180,7 +202,7 @@
     .time-remaining
         float right
 
-.icon-clock, .icon-calendar, .icon-category, .icon-tag
+.icon-clock, .icon-calendar, .icon-category, .icon-tag, .icon-link, .icon-series
     width rem(15px)
     height rem(15px)
     fill darken(lightGray,30%)
@@ -238,8 +260,8 @@
             transition all .5s
             font-size rem(18px)
             &:hover
-                border-bottom 1px solid themeColor
-        .entry-date
+                border-bottom 1px solid secondaryColor
+        .entry-date, .entry-tags
             float right
             +below(cut)
                 display none

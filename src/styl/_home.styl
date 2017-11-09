@@ -33,23 +33,24 @@ main
         margin 0 rem(15px) rem(30px)
     &:hover
         z-index 2
-        transform scale(1.1)
+        //transform scale(1.1)
         img
-            -webkit-filter grayscale(100%)
-            filter grayscale(100%)
-            transform scale(1.05)
+            -webkit-filter grayscale(85%)
+            filter grayscale(85%)
+            //transform scale(1.05)
         .box-body
             time, p
                 color accentDark
             .new-post:after
                 background-color #000
+                color #fff
             .cover
                 a:before
                     opacity 1
     a
         text-decoration none
         display block
-    .category
+    .category, .series
         display block
         height rem(36px)
         line-height rem(36px)
@@ -57,10 +58,18 @@ main
         font-weight bold
         font-size rem(18px)
         padding 0 rem(15px)
+        &.shared
+            width 50%
+            float left
         a
             color accentDark
+            overflow hidden
+            white-space nowrap
+            text-overflow ellipsis
             &:hover
-                color altColor
+                color primaryColor
+    .series
+        text-align right
     .box-body
         img 
             width 100%
@@ -103,7 +112,7 @@ main
             content 'New post'
             text-transform uppercase
             display inline-block
-            background themeColor
+            background secondaryColor
             color #fff
             font-size rem(13px)
             font-weight 700
