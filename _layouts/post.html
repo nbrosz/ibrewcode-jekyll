@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://schema.org/BlogPosting">
-    {% include head.html %}
+    {% include head.html prism=true %}
     <body class="has-push-menu">
         {% comment %}
         {% include minutes-to-read.html %}
@@ -93,5 +93,7 @@
             {% include comments.html %}
             {% include footer.html %}
         </section>
+        <script src="{{ "/assets/js/prism.js" | prepend: site.baseurl }}"></script>
+        <script type="application/javascript">Prism.plugins.autoloader.languages_path = "{{ "/assets/js/langs/" | prepend: site.baseurl }}";</script>
     </body>
 </html>
