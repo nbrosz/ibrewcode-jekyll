@@ -25,8 +25,7 @@ Suppose that we had a gesture recognizer on **E**. In order for it to properly c
 
 I've found this to be true in iOS and Android as of Xamarin Forms version **2.4** (I did not develop for Windows Phone). To correct this problem, I wrote a function to properly set the input transparency.
 
-<pre class="line-numbers"><code class="language-csharp">
-{% capture code %}
+<pre class="line-numbers"><code class="language-csharp">{% capture code %}
 // input transparency is based on whether the view, its parent, or its children have gestures
 // for a gesture to be passed and register, the children, view, and parent with a gesture recognizer must all have input transparency set to false
 // however, any view that has no gesture recognizers, nor any from its children, should remain with input transparency true so as not to block gestures
@@ -69,9 +68,7 @@ static bool SetViewTransparency(View view, bool parentHasRecognizer)
     
     return view.InputTransparent;
 }
-{% endcapture %}
-{{ code | xml_escape }}
-</code></pre>
+{% endcapture %}{{ code | lstrip | rstrip | xml_escape }}</code></pre>
 
 Why is this the case? Truthfully, I have no idea. I was not able to find much discussion on the topic, so I arrived at this entirely through experimentation. Perhaps the described model is not correct and input transparency works differently than described, but I have yet to find a situation where the described function did not resolve my input issues. 
 
