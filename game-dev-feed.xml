@@ -13,12 +13,12 @@
 				<pubDate>{% unless post.last_modified_at %}{{ post.date | date_to_rfc822 }}{% else %}{{ post.last_modified_at | date_to_rfc822 }}{% endunless %}</pubDate>
 				{% if post.introduction %}
 					<description>{{ post.introduction | xml_escape }}</description>
-					<content:encoded>{{ post.content | xml_escape }}</content:encoded>
+					<content:encoded><![CDATA[{{ post.content | xml_escape }}]]></content:encoded>
 				{% elsif post.excerpt %}
 					<description>{{ post.excerpt | xml_escape }}</description>
-					<content:encoded>{{ post.content | xml_escape }}></content:encoded>
+					<content:encoded><![CDATA[{{ post.content | xml_escape }}]]></content:encoded>
 				{% else %}
-					<content:encoded>{{ post.content | xml_escape }}></content:encoded>
+					<content:encoded><![CDATA[{{ post.content | xml_escape }}]]></content:encoded>
 				{% endif %}
 				<link>{{ site.url }}{{ post.url }}</link>
 				<guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
