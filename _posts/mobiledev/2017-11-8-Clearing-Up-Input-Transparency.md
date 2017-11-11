@@ -12,15 +12,15 @@ The [Xamarin Forms documentation](https://developer.xamarin.com/api/property/Xam
 
 > Gets or sets a value indicating whether this element should be involved in the user interaction cycle.... [The value is] false if the element should receive input; true if element should not receive input and should, instead, pass inputs to the element below. Default is false.
 
-![Element Layers]({{media}}/figA.png){: .left }
+![Element Layers]({{media}}figA.png){: .left }
 Imagine if **A**, **B**, and **C** all have [gesture recognizers](https://developer.xamarin.com/api/property/Xamarin.Forms.View.GestureRecognizers/) on their elements, but **B** has InputTransparent set to **true**, while **A** and **C** have an input transparency of **false**. The documentation implies that **C** would consume a tap gesture, preventing it from passing down, while **B** would not, instead allowing **A** to consume any gesture that wasn't consumed by **C**.
 
 However, this does not appear to be the case. Instead, if **A** and **C** had InputTransparent set to **true** and **B** had InputTransparent set to **false**, the gestures wouldn't be consumed at all.
 
-![Element Hierarchy]({{media}}/figB.png){: .right }
+![Element Hierarchy]({{media}}figB.png){: .right }
 Instead, it seems to work more like the figure above. Imagine that the hierarchy represents elements layered on top of one another, with **A** being the bottom-most element, while **C**, **G**, and **H** are the top-most layered elements. In this example, **C** covers **B**, which covers **A** and **G** and **H** covers **F**, etc., but **D** does not cover **B**, and vice versa.
 
-![InputTransparent Hierarchy]({{media}}/figC.png){: .left }
+![InputTransparent Hierarchy]({{media}}figC.png){: .left }
 Suppose that we had a gesture recognizer on **E**. In order for it to properly consume gestures, it would need its input transparency set to **false**. Furthermore, *all* recursive parents and children must also have their input transparency set to **false** in order for the gesture to be properly consumed. If **C** overlapped **E** but we didn't have gesture recognizer and we didn't want it to block and consume gestures, it would need InputTransparent to be set to **true**.
 
 I've found this to be true in iOS and Android as of Xamarin Forms version **2.4** (I did not develop for Windows Phone). To correct this problem, I wrote a function to properly set the input transparency.

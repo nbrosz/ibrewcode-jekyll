@@ -5,7 +5,7 @@ logo: i<span class='alt'>brew</span>code
 email: contact@ibrewcode.com
 description: Programming and probably more.
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://ibrewcode.com" # the base hostname & protocol for your site
+url: "https://ibrewcode.com" # the base hostname & protocol for your site
 google_analytics: "UA-108800182-1"
 
 # User Settings
