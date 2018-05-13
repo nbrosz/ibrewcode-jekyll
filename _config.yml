@@ -2,7 +2,7 @@
 title: I Brew Code
 tagline: Developing my life
 logo: i<span class='alt'>brew</span>code
-email: contact@ibrewcode.com
+email: nbrosz@ibrewcode.com
 description: Programming and probably more.
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://ibrewcode.com" # the base hostname & protocol for your site
