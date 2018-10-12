@@ -1,0 +1,8 @@
+What I Learned This Week - a weekly series into at least one new thing I found out, preferably software development related, but not necessarily -- very few rules or minimum limits, to try to keep it easy to do on a weekly basis
+
+Make a Game with CPP - a semi-regular series following the development of a game engine in C++, following videos (one per post), keeping code in a repository, and offering thoughts (or divergences) that may be of interest
+
+Math for Game Devs - like the above, except for videos about math, maybe alternated with the above every other week (or every other fortnight)?
+
+Layered Architecture - talking about separation of concerns, different approaches I've taken, and some downsides I've found from my own implementations of layered architecture (or some questions that linger) -- probably long enough to be a multi-part series
+
