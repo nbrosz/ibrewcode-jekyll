@@ -2,7 +2,7 @@
 layout: post
 title: Clearing Up Input Transparency
 category: Mobile Dev
-tags: [Xamarin, iOS, Android, Xamarin Forms, Bug]
+tags: [Xamarin, Bug]
 image: "banner.jpg"
 introduction: "The Xamarin Forms documentation for input transparency implies that the InputTransparent property simply defines whether or not the element consumes input or passes it. My experiences suggest something a bit more complicated."
 ---
