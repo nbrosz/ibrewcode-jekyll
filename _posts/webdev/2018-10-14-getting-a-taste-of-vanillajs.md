@@ -14,7 +14,8 @@ The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Boots
 
 ![Bulma Columns and Buttons]({{media}}bulma-buttons.png)
 
-<pre class="line-numbers"><code class="language-markup"><!--<div class="columns"> 
+<pre class="line-numbers"><code class="language-markup"><!--
+<div class="columns"> 
 <div class="column"> 
 <div class="button is-primary is-fullwidth">First Button</div> 
 </div> 
@@ -24,8 +25,8 @@ The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Boots
 <div class="column"> 
 <div class="button is-outlined is-large is-danger">Third Button</div> 
 </div> 
-</div>-->
-</code></pre>
+</div>
+--></code></pre>
 
 ## The Catch
 Everything probably would have been fine, if not for the necessity of supporting Internet Explorer 11. You Might Not Need jQuery does a great job of offering alternative solutions to get around IE 11's many missing features, but those alternate solutions almost certainly **will** be necessary. I was under the impression that IE9 and below was where the problems really started, and they probably are much worse when you're targeting that level of support, but the lack of things like Promises or JSON support for XMLHttpRequest means that third party libraries are almost certainly going to be necessary (I found that [BluebirdJS Core](http://bluebirdjs.com) did an excellent job of providing drop-in support for Promises). I also had to make various tweaks hacky CSS tweaks for Bulma's modals to work, since IE11 doesn't fully support flexboxes.
