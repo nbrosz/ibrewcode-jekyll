@@ -14,17 +14,18 @@ The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Boots
 
 ![Bulma Columns and Buttons]({{media}}bulma-buttons.png)
 
-<pre class="line-numbers"><code class="language-html">&lt;div class=&quot;columns&quot;&gt; 
-&lt;div class=&quot;column&quot;&gt; 
-&lt;div class=&quot;button is-primary is-fullwidth&quot;&gt;First Button&lt;/div&gt; 
-&lt;/div&gt; 
-&lt;div class=&quot;column&quot;&gt; 
-&lt;div class=&quot;button is-rounded is-medium is-warning is-pulled-right&quot;&gt;Second Button&lt;/div&gt; 
-&lt;/div&gt; 
-&lt;div class=&quot;column&quot;&gt; 
-&lt;div class=&quot;button is-outlined is-large is-danger&quot;&gt;Third Button&lt;/div&gt; 
-&lt;/div&gt; 
-&lt;/div&gt;</code></pre>
+<pre class="line-numbers"><code class="language-markup"><!--<div class="columns"> 
+<div class="column"> 
+<div class="button is-primary is-fullwidth">First Button</div> 
+</div> 
+<div class="column"> 
+<div class="button is-rounded is-medium is-warning is-pulled-right">Second Button</div> 
+</div> 
+<div class="column"> 
+<div class="button is-outlined is-large is-danger">Third Button</div> 
+</div> 
+</div>-->
+</code></pre>
 
 ## The Catch
 Everything probably would have been fine, if not for the necessity of supporting Internet Explorer 11. You Might Not Need jQuery does a great job of offering alternative solutions to get around IE 11's many missing features, but those alternate solutions almost certainly **will** be necessary. I was under the impression that IE9 and below was where the problems really started, and they probably are much worse when you're targeting that level of support, but the lack of things like Promises or JSON support for XMLHttpRequest means that third party libraries are almost certainly going to be necessary (I found that [BluebirdJS Core](http://bluebirdjs.com) did an excellent job of providing drop-in support for Promises). I also had to make various tweaks hacky CSS tweaks for Bulma's modals to work, since IE11 doesn't fully support flexboxes.
