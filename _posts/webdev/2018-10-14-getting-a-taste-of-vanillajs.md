@@ -16,15 +16,15 @@ The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Boots
 
 <pre class="line-numbers"><code class="language-markup"><!--
 <div class="columns"> 
-<div class="column"> 
-<div class="button is-primary is-fullwidth">First Button</div> 
-</div> 
-<div class="column"> 
-<div class="button is-rounded is-medium is-warning is-pulled-right">Second Button</div> 
-</div> 
-<div class="column"> 
-<div class="button is-outlined is-large is-danger">Third Button</div> 
-</div> 
+    <div class="column"> 
+        <div class="button is-primary is-fullwidth">First Button</div> 
+    </div> 
+    <div class="column"> 
+        <div class="button is-rounded is-medium is-warning is-pulled-right">Second Button</div> 
+    </div> 
+    <div class="column"> 
+        <div class="button is-outlined is-large is-danger">Third Button</div> 
+    </div> 
 </div>
 --></code></pre>
 
