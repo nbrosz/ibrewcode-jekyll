@@ -12,7 +12,7 @@ Thanks to helpful sources like [You Might not Need jQuery](http://youmightnotnee
 
 The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Bootstrap](https://getbootstrap.com/) had been my go-to, and even though it has been around for a long time, I still think it has a visually appealing style that has endured the test of time much better than other approaches to a "modern web" look (does anyone remember Web 2.0?). The problem is that it seems like [most of the best front-end frameworks rely on jQuery](https://www.keycdn.com/blog/front-end-frameworks) (or they are more of a [minimal framework](https://www.hongkiat.com/blog/bootstrap-alternatives/) like [Skeleton](http://getskeleton.com)). In the end, I settled on [Bulma](https://bulma.io/) as a non-jQuery CSS-only front-end library, and so far, I've enjoyed both its Bootstrap-like modern look and the simple way it handles styling with intuitive modifiers.
 
-![Bulma Columns and Buttons]({{media}}bulma-buttons.png){: .left }
+![Bulma Columns and Buttons]({{media}}bulma-buttons.png)
 
 <pre class="line-numbers"><code class="language-html">&lt;div class=&quot;columns&quot;&gt; 
 &lt;div class=&quot;column&quot;&gt; 
