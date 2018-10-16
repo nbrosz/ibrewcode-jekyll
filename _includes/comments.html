@@ -7,12 +7,12 @@
 <script>
 
 var disqus_config = function () {
-this.page.url = '{{page.url}}';  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = '{{page.title}}';
+this.page.identifier = '{{page.url}}';
+this.page.title = '{{page.title}}';
 };
 (function() { // DON'T EDIT BELOW THIS LINE
 var d = document, s = d.createElement('script');
-s.src = 'https://i-brew-code.disqus.com/embed.js';
+s.src = 'https://{{site.disqus_username}}.disqus.com/embed.js';
 s.setAttribute('data-timestamp', +new Date());
 (d.head || d.body).appendChild(s);
 })();
