@@ -10,7 +10,7 @@ google_analytics: "UA-108800182-1"
 
 # User Settings
 username: "Nic Brosz"
-user_description: A new software developer jumping into the wild world of code.
+user_description: A software developer jumping into the wild world of code.
 disqus_username: i-brew-code
 
 media: /media/posts/
@@ -21,7 +21,7 @@ github_username: nbrosz
 # facebook_username: facebook_username
 twitter_username: nbrosz
 # instagram_username: instagram_username
-# linkedin_username: linkedin_username
+linkedin_username: nsbrosz
 # medium_username: medium_username
 
 # Build settings
