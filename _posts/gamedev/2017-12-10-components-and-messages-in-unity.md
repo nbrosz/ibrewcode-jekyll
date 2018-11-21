@@ -2,7 +2,7 @@
 layout: post
 title: Components and Messages in Unity
 category: Game Dev
-tags: [Unity, Learning]
+tags: [Unity]
 image: "banner.jpg"
 introduction: "Message passing seems a natural fit for a component based architecture, but I'm not satisfied with Unity's built in messaging system, so I tried to make my own."
 ---

@@ -28,7 +28,7 @@ layout: main
                     <div class="cover">
                         {% include new-post-tag.html date=post.date %}
                         <a href="{{ post.url | prepend: site.baseurl }}" {%if isnewpost %}class="new-post"{% endif %}>
-                            <img src="assets/img/placeholder.png" data-url="{{ site.baseurl }}{{ site.media }}{{ post.title | slugify }}/{{ post.image }}" class="preload">
+                            <img src="assets/img/placeholder.png" data-url="{{ site.baseurl }}{{ site.media }}{% if post.slug %}{{ post.slug }}{% else %}{{ post.title | slugify }}{% endif %}/{{ post.image }}" class="preload">
                         </a>
                     </div>
                 {% endif %}

@@ -2,13 +2,13 @@
 layout: post
 title: Getting a Taste of VanillaJS
 category: Web Dev
-tags: [jQuery, Learning]
+tags: []
 image: "banner.jpg"
 introduction: "After years of relying on jQuery, all while reading articles about how jQuery is dead, I decided to go vanilla."
 ---
 {% include postdata.html post=page %}
 
-Thanks to helpful sources like [You Might not Need jQuery](http://youmightnotneedjquery.com/) and [Can I Use...](https://caniuse.com/), finding alternatives to common jQuery functions is easy, and I was very impressed with the simplicity that the modern *querySelector(selector)* and *querySelectorAll(selector)* offer, and I'm certain I'm not in the minority by saying that the convenience of jQuery's find functions were some of the features that I used the most. *querySelector*, *matches*, and *closest* became my bread and butter, and although the XMLHttpRequest object is not the prettiest construct, but at least there is [plenty of documentation](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest), and once I created a helper function to speed things along, I didn't have much issue.
+Thanks to helpful sources like [You Might not Need jQuery](http://youmightnotneedjquery.com/) and [Can I Use...](https://caniuse.com/), finding alternatives to common jQuery functions is easy, and I was very impressed with the simplicity that the modern *querySelector(selector)* and *querySelectorAll(selector)* offer. I'm sure that I'm not in the minority with *querySelector*, *matches*, and *closest* becoming my bread and butter, and although the XMLHttpRequest object is not the prettiest construct, but at least there is [plenty of documentation](https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/Using_XMLHttpRequest), and once I created a helper function to speed things along, I didn't have much issue.
 
 The bigger difficulty was finding a front-end (CSS) framework. Up to now, [Bootstrap](https://getbootstrap.com/) had been my go-to, and even though it has been around for a long time, I still think it has a visually appealing style that has endured the test of time much better than other approaches to a "modern web" look (does anyone remember Web 2.0?). The problem is that it seems like [most of the best front-end frameworks rely on jQuery](https://www.keycdn.com/blog/front-end-frameworks) (or they are more of a [minimal framework](https://www.hongkiat.com/blog/bootstrap-alternatives/) like [Skeleton](http://getskeleton.com)). In the end, I settled on [Bulma](https://bulma.io/) as a non-jQuery CSS-only front-end library, and so far, I've enjoyed both its Bootstrap-like modern look and the simple way it handles styling with intuitive modifiers.
 

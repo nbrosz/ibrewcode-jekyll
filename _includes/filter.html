@@ -2,7 +2,7 @@
     {% if page.category %}
     <h1>Filed Under {{ page.category }}</h1>
     {% elsif page.series %}
-    <h1>Part of {{ page.series }}</h1>
+    <h1>{{ page.series }}</h1>
     {% else %}
     <h1>Tags</h1>
     {% endif %}
